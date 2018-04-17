@@ -1,0 +1,35 @@
+#headerWrapper {
+ height: 20vh;
+ background:rgba(0, 21, 255, 0.406);
+ display: flex;
+ justify-content: space-around
+}
+.itemsInCart {
+ border: 1px solid #888;
+}
+#cartModal {
+ position: fixed;
+ display: none;
+ z-index: 1;
+ right: 0;
+ top: 0;
+ width: 100%; /* Full width */
+ height: 100%; /* Full height */
+ background-color: rgb(0,0,0); /* Fallback color */
+ background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+#cartModalContent{
+ background-color: #fefefe;
+ margin: 5% auto;
+ padding: 20px;
+ width: 30%; /* Could be more or less, depending on screen size */
+ height: 60%;
+ font-size: 20px;
+ overflow: auto;
+}
+#close {
+ cursor: pointer;
+}
+#alert {
+ color: red;
+}

@@ -1,0 +1,19 @@
+#loginBox {
+ height: 40vh;
+ margin: 2% auto;
+ border: 1px solid black;
+
+ width: 50%;
+ display: flex;
+ justify-content: space-around;
+ flex-direction: column;
+ padding: 5%;
+}
+#errorMessage {
+ color: red;
+ font-style: italic;
+}
+#successMessage {
+ color: green;
+ font-style: italic;
+}
