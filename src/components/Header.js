@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './header.css'
 import axios from 'axios'
-import { logOut, updateUser, emptyCart } from '../ducks/reducer'
+import { logOut, updateUser, removeFromCart, emptyCart } from '../ducks/reducer'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -26,29 +26,23 @@ class Header extends Component {
     })
   }
 
-  removeProduct(id) {
-    axios.delete('/api/cart?=' + id).then( res => {
-     this.setState({ 
-       cart: res.data,
-       itemsInCart: res.data.length
-      })
-    })
+  removeProduct(item) {
+    this.props.removeFromCart(item);
   }
 
   emptyCart() {
-    axios.delete('/api/empty').then( res => {
-      this.props.emptyCart();
-    })
+    this.props.emptyCart();
   }
  
   render() {
   let cartItems = this.props.cart.map((item, i) => {
     return (
       <div className="itemsInCart" key={item + i}>
-        {item[0].name}<br/>
-        {item[0].price}<br/>
-        {item[0].description}<br/>
-        <button onClick={()=>this.removeProduct(item.product_id)}>delete</button>
+        {item.name}<br/>
+        {item.price}<br/>
+        {item.description}<br/>
+        {item.cartid}<br/>
+        <button onClick={()=>this.removeProduct(item)}>delete</button> 
       </div>
     )
   })
@@ -76,15 +70,18 @@ class Header extends Component {
         <span id="close" onClick={()=>this.closeSpan()}>&times;</span>
             {cartItems}
             <button onClick={()=>this.checkout()}>checkout</button>
+
             {this.props.user ? 
             <div> Welcome, {this.props.user}! </div> : 
             <div id="alert"> Please login to checkout.
+              
             <Link to='/register'> <button onClick={()=>this.closeSpan()}>register</button></Link>
+
             {!this.props.user ? 
               <Link to='/login'><button onClick={()=>this.closeSpan()}>login</button></Link> : 
-              <Link to='/' onClick={()=>this.logOut()}><button>logout</button></Link>}</div>
+              <Link to='/' onClick={()=>this.logOut()}><button>logout</button></Link>}
+              </div>
             }
-      
       <br/> 
       </div>
     </div>
@@ -93,13 +90,11 @@ class Header extends Component {
  }
 }
 function mapStateToProps(state) {
- let { user, products, cart } = state;
+ let { user, cart } = state;
  return {
   user,
-  products,
   cart
-
  }
 }
 
-export default connect(mapStateToProps, { logOut, updateUser, emptyCart })(Header);
+export default connect(mapStateToProps, { logOut, updateUser, removeFromCart, emptyCart })(Header);

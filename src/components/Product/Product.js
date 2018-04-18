@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import Header from '../Header'
 import { connect } from 'react-redux'
-import { getProducts, addProduct } from '../../ducks/reducer'
+import { addToCart } from '../../ducks/reducer'
 import axios from 'axios'
 
 import "./product.css"
@@ -10,33 +9,30 @@ import "./product.css"
 class Product extends Component {
 
  state = {
-  username: '',
+  products: []
  }
 
  componentDidMount() {
-  axios.get('/api/cart').then(res => {
-   this.props.addProduct( res.data );
-  })
+
   axios.get('/api/products').then(res => {
-   this.props.getProducts(res.data)
+   this.setState({ products: res.data })
   })
  }
 
- addToCart(id) {
-  axios.post('/api/cart?id=' + id).then( res => {
-   this.props.addProduct(res.data)
-  })
+ addToCart(item) {
+   
+   this.props.addToCart(item)
  }
 
  render() {
-  let productList = this.props.products.map((item, i) => { 
+  let productList = this.state.products.map((item, i) => { 
    return (
    <div className="product" key={item + i}>
       {item.name}<br/>
       {item.price}<br/>
       {item.description}<br/>
 
-      <button onClick={()=>this.addToCart(item.product_id)}>add to cart</button>
+      <button onClick={()=>this.addToCart(item)}>add to cart</button>
    </div>
    )
   })
@@ -50,12 +46,11 @@ class Product extends Component {
  }
 }
 function mapStateToProps(state) {
- let { products } = state;
-
+ let { user } = state;
  return {
-  products
+   user
  }
 }
 
-export default connect(mapStateToProps, {getProducts, addProduct })(Product);
+export default connect(mapStateToProps, { addToCart })(Product);
 
